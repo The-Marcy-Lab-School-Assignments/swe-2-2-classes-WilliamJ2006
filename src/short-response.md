@@ -36,9 +36,9 @@ class Vehicle {
 }
 ```
 
-passenger should be made private in order to prevent a user from being able to push into or modify the array outside of using a dedicated method.
+Passenger should be made private in order to prevent a user from being able to push into or modify the array outside of using a dedicated method.
 
-private methods can also be used as helper methods which contain calculations that can be called in another method, those are private since the user never needs to interact with them.
+Private methods can also be used as helper methods which contain calculations that can be called in another method, those are private since the user never needs to interact with them.
 
 ---
 
@@ -48,6 +48,37 @@ Explain what factors you should consider when deciding to make a property/method
 
 ## Response 3
 You should consider if the property/method needs to be incremented or changed depending on all **instances**. Since **static** allows for a property/method to be owned by the **class** instead of individual instances of the class, it's used to final totals or data that resides in all instances.
+
+```js
+class KidCandyCount {
+  #candies;
+  static #totalCandies = 0;
+  constructor(firstName, lastName, candies) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    candies ? this.#candies = candies : this.#candies = 0;
+    KidCandyCount.#totalCandies += this.#candies;
+  }
+  givenCandy(amount) {
+    this.#balance += amount;
+    BankAccount.#totalBalance += amount;
+  }
+  giveCandy(amount) {
+    if (amount > this.#candies) {
+      return `You don't have enough candies!.`;
+    } else {
+      this.#candies -= amount;
+      KidCandyCount.#totalCandies -= amount;
+    }
+  }
+  static getTotalCandies() {
+    return KidCandyCount.#totalCandies;
+  }
+}
+```
+
+Static is being used here in order to create a variable owned by the class itself to keep track of total candies across all instances.
+The total candies not using static only keeps track of total candies within each invididual instance since their owned by their respective instance.
 ---
 
 ## Prompt 4
