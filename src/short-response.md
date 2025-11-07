@@ -28,6 +28,18 @@ Explain what factors you should consider when deciding to make a property/method
 ## Response 2
 You should consider whether or not the user needs to interact with the property/method. If the user shouldn't been able to interact with the property/method outside of invoking or logging them, (pushing or reassigning), it should be made **private**.
 
+An example is 
+
+```js
+class Vehicle {
+  #passenger = [];
+}
+```
+
+passenger should be made private in order to prevent a user from being able to push into or modify the array outside of using a dedicated method.
+
+private methods can also be used as helper methods which contain calculations that can be called in another method, those are private since the user never needs to interact with them.
+
 ---
 
 ## Prompt 3
