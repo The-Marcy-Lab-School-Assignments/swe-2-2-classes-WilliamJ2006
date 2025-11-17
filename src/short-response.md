@@ -16,8 +16,9 @@ With OOP in JavaScript, it's possible to use factory functions to achieve encaps
 How would you explain to a budding developer what the drawbacks of using factory functions are and why it is better to use classes instead?
 
 ## Response 1
+The drawbacks of a factory function is increased memory usage because every **object** created by the **function** uses memory to store their **methods**.
 
-
+Classes are better because every new instance doesn't use extra memory and instead use the methods stored in he main class.
 ---
 
 ## Prompt 2
@@ -25,7 +26,19 @@ How would you explain to a budding developer what the drawbacks of using factory
 Explain what factors you should consider when deciding to make a property/method private? Provide an example to support your response.
 
 ## Response 2
+You should consider whether or not the user needs to interact with the property/method. If the user shouldn't been able to interact with the property/method outside of invoking or logging them, (pushing or reassigning), it should be made **private**.
 
+An example is 
+
+```js
+class Vehicle {
+  #passenger = [];
+}
+```
+
+Passenger should be made private in order to prevent a user from being able to push into or modify the array outside of using a dedicated method.
+
+Private methods can also be used as helper methods which contain calculations that can be called in another method, those are private since the user never needs to interact with them.
 
 ---
 
@@ -34,7 +47,38 @@ Explain what factors you should consider when deciding to make a property/method
 Explain what factors you should consider when deciding to make a property/method static? Provide an example to support your response.
 
 ## Response 3
+You should consider if the property/method needs to be incremented or changed depending on all **instances**. Since **static** allows for a property/method to be owned by the **class** instead of individual instances of the class, it's used to final totals or data that resides in all instances.
 
+```js
+class KidCandyCount {
+  #candies;
+  static #totalCandies = 0;
+  constructor(firstName, lastName, candies) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    candies ? this.#candies = candies : this.#candies = 0;
+    KidCandyCount.#totalCandies += this.#candies;
+  }
+  givenCandy(amount) {
+    this.#balance += amount;
+    BankAccount.#totalBalance += amount;
+  }
+  giveCandy(amount) {
+    if (amount > this.#candies) {
+      return `You don't have enough candies!.`;
+    } else {
+      this.#candies -= amount;
+      KidCandyCount.#totalCandies -= amount;
+    }
+  }
+  static getTotalCandies() {
+    return KidCandyCount.#totalCandies;
+  }
+}
+```
+
+Static is being used here in order to create a variable owned by the class itself to keep track of total candies across all instances.
+The total candies not using static only keeps track of total candies within each invididual instance since their owned by their respective instance.
 ---
 
 ## Prompt 4
@@ -56,3 +100,18 @@ class Vault {
 Identify what the mistake is, explain why it is a problem, and suggest a way to fix it.
 
 ## Response 4
+The mistake is `listSecrets` isn't returning a copy of the array but instead the original array. This exposes the memory address of the orignal array and leaves it vunerable.
+
+```js
+class Vault {
+  #secrets = [];
+  addSecret(newSecret) {
+    this.#secrets.push(newSecret);
+  }
+  listSecrets() {
+    return [...this.#secrets];
+  }
+}
+```
+
+The fix above returns a copy of the original array, getting rid of the risks of returning the original by using the spread operator.
